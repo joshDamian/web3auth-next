@@ -4,6 +4,8 @@ import Web3AuthContext from "../context/Web3AuthProvider";
 export default function useWeb3Auth() {
   const { chain, supportedChains, provider, web3auth, setProvider, rpc } = useContext(Web3AuthContext);
 
+  const isAuthenticated = provider && rpc;
+
   const login = async () => {
     if (!web3auth) {
       console.log("web3auth not initialized yet");
@@ -98,5 +100,6 @@ export default function useWeb3Auth() {
     sendTransaction,
     signMessage,
     getPrivateKey,
+    isAuthenticated,
   };
 }

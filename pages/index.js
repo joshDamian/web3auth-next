@@ -1,37 +1,14 @@
 import Head from "next/head";
 import AccountDashboard from "../components/Account";
+import Header from "../components/Header";
 import useWeb3Auth from "../hooks/useWeb3Auth";
 
 export default function Home() {
-  const {
-    login,
-    logout,
-    sendTransaction,
-    getUserInfo,
-    getPrivateKey,
-    provider,
-    signMessage,
-  } = useWeb3Auth();
+  const { login, logout, sendTransaction, getPrivateKey, signMessage, isAuthenticated } = useWeb3Auth();
 
   const loggedInView = (
     <>
-      <button onClick={getUserInfo} className="card">
-        Get User Info
-      </button>
       <AccountDashboard />
-      <button onClick={sendTransaction} className="card">
-        Send Transaction
-      </button>
-      <button onClick={signMessage} className="card">
-        Sign Message
-      </button>
-      <button onClick={getPrivateKey} className="card">
-        Get Private Key
-      </button>
-      <button onClick={logout} className="card">
-        Log Out
-      </button>
-
       <div id="console" style={{ whiteSpace: "pre-line" }}>
         <p style={{ whiteSpace: "pre-line" }}></p>
       </div>
@@ -45,23 +22,15 @@ export default function Home() {
   );
 
   return (
-    <div className="container">
+    <>
       <Head>
         <title>TixHive - Web3Auth Account manager</title>
       </Head>
-      <h1 className="title">Web3Auth account manager</h1>
-
-      <div className="grid">{provider ? loggedInView : unloggedInView}</div>
-
-      <footer className="footer">
-        <a
-          href="https://github.com/Web3Auth/Web3Auth/tree/master/examples/react-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Source code
-        </a>
-      </footer>
-    </div>
+      <Header />
+      <main className="py-8 lg:py-10 px-5 lg:px-8 max-w-[1512px] mx-auto">
+        {isAuthenticated ? loggedInView : unloggedInView}
+      </main>
+      <footer className="footer"></footer>
+    </>
   );
 }

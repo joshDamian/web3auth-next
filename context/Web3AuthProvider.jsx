@@ -46,6 +46,8 @@ export const Web3AuthProvider = ({ clientId, children }) => {
   useEffect(() => {
     if (provider) {
       setRpc(new RPC(provider));
+    } else {
+      setRpc(null);
     }
   }, [provider]);
 
