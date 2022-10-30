@@ -17,7 +17,7 @@ export default function Header() {
 
   return (
     <header className="py-5 lg:py-7 border-b w-full border-slate-700 px-5 lg:px-8 max-w-[1512px] mx-auto flex items-center justify-between">
-      <h3 className="text-xl md:text-2xl lg:text-3xl font-bold">TixHive Wallet Manager</h3>
+      <h3 className="text-xl text-white md:text-2xl lg:text-3xl font-bold">TixHive Wallet Manager</h3>
       <nav>
         <div className="flex items-center">
           {isAuthenticated ? (
