@@ -1,4 +1,5 @@
 import Head from "next/head";
+import AccountDashboard from "../components/Account";
 import useWeb3Auth from "../hooks/useWeb3Auth";
 
 export default function Home() {
@@ -7,9 +8,6 @@ export default function Home() {
     logout,
     sendTransaction,
     getUserInfo,
-    getChainId,
-    getAccounts,
-    getBalance,
     getPrivateKey,
     provider,
     signMessage,
@@ -20,15 +18,7 @@ export default function Home() {
       <button onClick={getUserInfo} className="card">
         Get User Info
       </button>
-      <button onClick={getChainId} className="card">
-        Get Chain ID
-      </button>
-      <button onClick={getAccounts} className="card">
-        Get Accounts
-      </button>
-      <button onClick={getBalance} className="card">
-        Get Balance
-      </button>
+      <AccountDashboard />
       <button onClick={sendTransaction} className="card">
         Send Transaction
       </button>
