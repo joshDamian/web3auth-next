@@ -4,6 +4,7 @@ import { CHAIN_NAMESPACES } from "@web3auth/base";
 import RPC from "../ethersRPC";
 import chains from "../supportedChains";
 import axios from "axios";
+import { ADAPTER_EVENTS } from "@web3auth/base";
 
 const Web3AuthContext = createContext({});
 
@@ -14,8 +15,30 @@ export const Web3AuthProvider = ({ clientId, children }) => {
   const [rpc, setRpc] = useState(null);
   const [tokens, setTokens] = useState(null);
   const [tokenPrices, setTokenPrices] = useState(null);
+  const [connecting, setConnecting] = useState(true);
 
   const supportedChains = Object.keys(chains);
+
+  // subscribe to lifecycle events emitted by web3auth
+  const subscribeAuthEvents = (web3auth) => {
+    web3auth.on(ADAPTER_EVENTS.CONNECTED, (data) => {
+      console.log("connected to wallet", data);
+      setConnecting(false);
+      // web3auth.provider will be available here after user is connected
+    });
+    web3auth.on(ADAPTER_EVENTS.CONNECTING, () => {
+      console.log("connecting");
+      setConnecting(true);
+    });
+    web3auth.on(ADAPTER_EVENTS.DISCONNECTED, () => {
+      console.log("disconnected");
+      setConnecting(false);
+    });
+    web3auth.on(ADAPTER_EVENTS.ERRORED, (error) => {
+      console.log("error", error);
+      setConnecting(false);
+    });
+  };
 
   useEffect(() => {
     const init = async () => {
@@ -26,8 +49,13 @@ export const Web3AuthProvider = ({ clientId, children }) => {
             chainNamespace: CHAIN_NAMESPACES.EIP155,
             chainId: chain,
             rpcTarget: chains[chain].rpcUrl,
+            displayName: chains[chain].name,
+            ticker: chains[chain].nativeCurrency.symbol,
+            tickerName: chains[chain].name,
           },
         });
+
+        subscribeAuthEvents(web3auth);
 
         setWeb3auth(web3auth);
 
@@ -106,7 +134,18 @@ export const Web3AuthProvider = ({ clientId, children }) => {
 
   return (
     <Web3AuthContext.Provider
-      value={{ provider, supportedChains, chain, setChain, web3auth, setProvider, rpc, tokens, tokenPrices }}
+      value={{
+        provider,
+        supportedChains,
+        chain,
+        setChain,
+        web3auth,
+        setProvider,
+        rpc,
+        tokens,
+        tokenPrices,
+        connecting,
+      }}
     >
       {children}
     </Web3AuthContext.Provider>

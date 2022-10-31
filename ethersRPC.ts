@@ -62,8 +62,6 @@ export default class EthereumRpc {
       const tx = await signer.sendTransaction({
         to: destination,
         value: amount,
-        maxPriorityFeePerGas: "5000000000", // Max priority fee per gas
-        maxFeePerGas: "6000000000000", // Max fee per gas
       });
 
       // Wait for transaction to be mined
@@ -71,6 +69,7 @@ export default class EthereumRpc {
 
       return receipt;
     } catch (error) {
+      console.log(error);
       return error as string;
     }
   }

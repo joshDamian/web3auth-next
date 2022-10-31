@@ -6,7 +6,7 @@ import NetWorth from "../components/NetWorth";
 import useWeb3Auth from "../hooks/useWeb3Auth";
 
 export default function Home() {
-  const { isAuthenticated } = useWeb3Auth();
+  const { isAuthenticated, connecting } = useWeb3Auth();
 
   const loggedInView = (
     <>
@@ -20,7 +20,7 @@ export default function Home() {
 
   const unloggedInView = (
     <div className="pt-24 flex justify-center">
-      <LoginButton />
+      <LoginButton showConnecting={true} />
     </div>
   );
 

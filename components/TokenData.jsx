@@ -11,8 +11,6 @@ function TokenData({ tokenInfo }) {
     return parseFloat(roundOff(tokenPrice)) * parseFloat(balanceInEther);
   };
 
-  console.log(tokenInfo);
-
   if (tokenInfo) {
     return (
       <div className="table-row">
