@@ -15,7 +15,7 @@ export const Web3AuthProvider = ({ clientId, children }) => {
   const [rpc, setRpc] = useState(null);
   const [tokens, setTokens] = useState(null);
   const [tokenPrices, setTokenPrices] = useState(null);
-  const [connecting, setConnecting] = useState(true);
+  const [connecting, setConnecting] = useState(false);
 
   const supportedChains = Object.keys(chains);
 
