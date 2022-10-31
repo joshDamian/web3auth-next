@@ -1,5 +1,5 @@
 import type { SafeEventEmitterProvider } from "@web3auth/base";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
 export default class EthereumRpc {
   private provider: SafeEventEmitterProvider;
@@ -33,7 +33,7 @@ export default class EthereumRpc {
     }
   }
 
-  async getBalance(): Promise<string> {
+  async getBalance(): Promise<BigNumber | string> {
     try {
       const ethersProvider = new ethers.providers.Web3Provider(this.provider);
       const signer = ethersProvider.getSigner();
@@ -42,9 +42,7 @@ export default class EthereumRpc {
       const address = await signer.getAddress();
 
       // Get user's balance in ether
-      const balance = ethers.utils.formatEther(
-        await ethersProvider.getBalance(address) // Balance is in wei
-      );
+      const balance = await ethersProvider.getBalance(address); // Balance is in wei
 
       return balance;
     } catch (error) {
@@ -52,15 +50,13 @@ export default class EthereumRpc {
     }
   }
 
-  async sendTransaction(): Promise<any> {
+  async sendTransaction(destination: string, value: number): Promise<any> {
     try {
       const ethersProvider = new ethers.providers.Web3Provider(this.provider);
       const signer = ethersProvider.getSigner();
 
-      const destination = "0x40e1c367Eca34250cAF1bc8330E9EddfD403fC56";
-
       // Convert 1 ether to wei
-      const amount = ethers.utils.parseEther("0.001");
+      const amount = ethers.utils.parseEther(`${value}`);
 
       // Submit transaction to the blockchain
       const tx = await signer.sendTransaction({
@@ -79,12 +75,12 @@ export default class EthereumRpc {
     }
   }
 
-  async signMessage() {
+  async signMessage(message: string) {
     try {
       const ethersProvider = new ethers.providers.Web3Provider(this.provider);
       const signer = ethersProvider.getSigner();
 
-      const originalMessage = "YOUR_MESSAGE";
+      const originalMessage = message;
 
       // Sign the message
       const signedMessage = await signer.signMessage(originalMessage);

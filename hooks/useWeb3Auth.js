@@ -2,7 +2,8 @@ import { useContext } from "react";
 import Web3AuthContext from "../context/Web3AuthProvider";
 
 export default function useWeb3Auth() {
-  const { chain, supportedChains, provider, web3auth, setProvider, rpc } = useContext(Web3AuthContext);
+  const { chain, supportedChains, provider, web3auth, setProvider, rpc, tokens, tokenPrices } =
+    useContext(Web3AuthContext);
 
   const isAuthenticated = provider && rpc;
 
@@ -60,21 +61,25 @@ export default function useWeb3Auth() {
     return balance;
   };
 
-  const sendTransaction = async () => {
+  const sendTransaction = async (destination, value) => {
     if (!provider) {
       console.log("provider not initialized yet");
       return;
     }
-    const receipt = await rpc.sendTransaction();
+    if (!destination || !value) {
+      console.log("destination or value not set");
+      return;
+    }
+    const receipt = await rpc.sendTransaction(destination, value);
     return receipt;
   };
 
-  const signMessage = async () => {
+  const signMessage = async (message) => {
     if (!provider) {
       console.log("provider not initialized yet");
       return;
     }
-    const signedMessage = await rpc.signMessage();
+    const signedMessage = await rpc.signMessage(message);
     return signedMessage;
   };
 
@@ -90,6 +95,8 @@ export default function useWeb3Auth() {
   return {
     chain,
     supportedChains,
+    tokens,
+    tokenPrices,
     provider,
     login,
     getUserInfo,

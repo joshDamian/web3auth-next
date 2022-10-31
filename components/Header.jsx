@@ -1,23 +1,37 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import useWeb3Auth from "../hooks/useWeb3Auth";
+import LoginButton from "./LoginButton";
 
 export default function Header() {
-  const { getUserInfo, isAuthenticated, login } = useWeb3Auth();
+  const { getUserInfo, isAuthenticated } = useWeb3Auth();
   const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     async function init() {
       let userInfo = await getUserInfo();
-      console.log(userInfo);
       setUserInfo(userInfo);
     }
-    if (isAuthenticated) init();
+    if (isAuthenticated) {
+      init();
+    }
   }, [isAuthenticated]);
 
   return (
-    <header className="py-5 lg:py-7 border-b w-full border-slate-700 px-5 lg:px-8 max-w-[1512px] mx-auto flex items-center justify-between">
-      <h3 className="text-xl text-white md:text-2xl lg:text-3xl font-bold">TixHive Wallet Manager</h3>
+    <header className="py-5 lg:pt-7 lg:pb-0 border-b lg:border-0 w-full border-slate-700 px-5 lg:px-8 xl:px-12 max-w-[1512px] mx-auto flex items-center justify-between">
+      <h3 className="text-xl text-white md:text-3xl lg:text-4xl font-extrabold">
+        <span className="text-red-500 hidden lg:inline">TixHive</span> Portfolio
+      </h3>
+      {isAuthenticated && (
+        <div className="flex justify-center">
+          <select
+            defaultValue={"0x89"}
+            className="rounded-full w-full md:min-w-[200px] border-slate-600 border bg-transparent pl-3 pr-5 py-2"
+          >
+            <option value={"0x89"}>Polygon</option>
+          </select>
+        </div>
+      )}
       <nav>
         <div className="flex items-center">
           {isAuthenticated ? (
@@ -26,7 +40,7 @@ export default function Header() {
                 height={50}
                 alt="profile"
                 width={50}
-                src={userInfo?.profileImage || "https://i.pravatar.cc/300"}
+                src={userInfo?.profileImage ?? "https://i.pravatar.cc/300"}
                 className="rounded-full"
               />
               <div className="ml-3 hidden md:inline">
@@ -35,12 +49,7 @@ export default function Header() {
               </div>
             </div>
           ) : (
-            <button
-              onClick={login}
-              className="bg-blue-700 py-3 px-4 rounded-md shadow-lg font-semibold text-base hover:bg-blue-600 hover:ring-blue-400 hover:ring-1 transition-all duration-100"
-            >
-              Login
-            </button>
+            <LoginButton />
           )}
         </div>
       </nav>
