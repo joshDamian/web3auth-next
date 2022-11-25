@@ -20,7 +20,7 @@ export default function Header() {
   return (
     <header className="py-5 lg:pt-7 lg:pb-0 border-b lg:border-0 w-full border-slate-700 px-5 lg:px-8 xl:px-12 max-w-[1512px] mx-auto flex items-center justify-between">
       <h3 className="text-xl text-white md:text-3xl lg:text-4xl font-extrabold">
-        <span className="text-red-500 hidden lg:inline">TixHive</span> Portfolio
+        <span className="text-red-500 hidden lg:inline">Wallet</span> X
       </h3>
       {isAuthenticated && (
         <div className="flex justify-center">
